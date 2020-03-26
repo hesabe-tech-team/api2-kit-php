@@ -5,6 +5,7 @@ use HesabeCrypt;
 class Payment
 {
     private $baseUrl;
+    private $merchantCode;
     private $secretKey;
     private $ivKey;
     private $accessCode;
@@ -13,9 +14,10 @@ class Payment
     {
         $this->baseUrl = 'https://api.hesbstaging.com';
         // Get all three values from Merchant Panel, Profile section
+        $this->merchantCode = 'XXXXXX';      // Use Merchant Code
         $this->secretKey = 'XXXXXX';         // Use Secret key
         $this->ivKey = 'XXXXXX';             // Use Iv Key
-        $this->accessCode = 'XXXXXX';        // User Access Code
+        $this->accessCode = 'XXXXXX';        // Use Access Code
     }
 
     /**
@@ -24,7 +26,7 @@ class Payment
     public function checkoutRequest()
     {
         $data = [
-            'merchantCode' => 'XXXX',
+            'merchantCode' => $this->merchantCode,
             'amount' => 5.000,
             'paymentType' => 0,
             'responseUrl' => '',
