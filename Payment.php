@@ -12,7 +12,7 @@ class Payment
 
     public function __construct()
     {
-        $this->baseUrl = 'https://api.hesbstaging.com';
+        $this->baseUrl = 'https://sandbox.hesabe.com';
         // Get all three values from Merchant Panel, Profile section
         $this->merchantCode = 'XXXXXX';      // Use Merchant Code
         $this->secretKey = 'XXXXXX';         // Use Secret key
@@ -84,7 +84,7 @@ class Payment
      * Process the response after the transaction is complete
      * To use this method, make sure your SuccessUrl or FailureUrl
      * points to this method in which you'll receive a "data" param
-     * as a GET request. Then you can process it accordingly. 
+     * as a GET request. Then you can process it accordingly.
      *
      */
     public function response()
