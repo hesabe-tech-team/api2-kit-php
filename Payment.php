@@ -32,6 +32,7 @@ class Payment
             'responseUrl' => '',
             'failureUrl' => '',
             'version' => 2.0,
+            'orderReferenceNumber' => '',
             'variable1' => '',
             'variable2' => '',
             'variable3' => '',
