@@ -77,7 +77,7 @@ class Payment
      */
     public function redirectToPayment($token)
     {
-        header("Location: $this->baseUrl/payment?data=$responseToken");
+        header("Location: $this->baseUrl/payment?data=$token");
         exit;
     }
 
