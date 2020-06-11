@@ -1,6 +1,6 @@
 <?php
 
-use HesabeCrypt;
+require_once 'HesabeCrypt.php';
 
 class Payment
 {
@@ -9,48 +9,36 @@ class Payment
     private $secretKey;
     private $ivKey;
     private $accessCode;
+    private $hesabeCrypt;
 
-    public function __construct()
+    public function __construct($paymentApiUrl, $merchantCode, $secretKey, $ivKey, $accessCode)
     {
-        $this->baseUrl = 'https://sandbox.hesabe.com';
+        $this->baseUrl = $paymentApiUrl;
         // Get all three values from Merchant Panel, Profile section
-        $this->merchantCode = 'XXXXXX';      // Use Merchant Code
-        $this->secretKey = 'XXXXXX';         // Use Secret key
-        $this->ivKey = 'XXXXXX';             // Use Iv Key
-        $this->accessCode = 'XXXXXX';        // Use Access Code
+        $this->merchantCode = $merchantCode;      // Use Merchant Code
+        $this->secretKey = $secretKey;         // Use Secret key
+        $this->ivKey = $ivKey;             // Use Iv Key
+        $this->accessCode = $accessCode;        // Use Access Code
+        $this->hesabeCrypt = new HesabeCrypt();
     }
 
     /**
      * Create request for Payment
      */
-    public function checkoutRequest()
+    public function checkoutRequest($data)
     {
-        $data = [
-            'merchantCode' => $this->merchantCode,
-            'amount' => 5.000,
-            'paymentType' => 0,
-            'responseUrl' => '',
-            'failureUrl' => '',
-            'version' => 2.0,
-            'orderReferenceNumber' => '',
-            'variable1' => '',
-            'variable2' => '',
-            'variable3' => '',
-            'variable4' => '',
-            'variable5' => '',
-        ];
-
         $requestDataJson = json_encode($data);
-        $encryptedData = HesabeCrypt::encrypt($requestDataJson, $this->secretKey, $this->ivKey);
+        $encryptedData = $this->hesabeCrypt::encrypt($requestDataJson, $this->secretKey, $this->ivKey);
 
         $curl = curl_init();
-
         curl_setopt_array($curl, array(
             CURLOPT_URL => "$this->baseUrl/checkout",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 0,
+            CURLOPT_SSL_VERIFYHOST => 0,
+            CURLOPT_SSL_VERIFYPEER => 0,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
@@ -60,15 +48,14 @@ class Payment
                 "Accept: application/json"
             ),
         ));
-
         $response = curl_exec($curl);
         curl_close($curl);
-
-        $decryptResponse = HesabeCrypt::decrypt($response, $this->secretKey, $this->ivKey);
-        $jsonData = json_decode($decryptResponse, true);
-
-        $responseToken = $jsonData['response']['data'];
-
+        $decryptResponse = $this->hesabeCrypt::decrypt($response, $this->secretKey, $this->ivKey);
+        $decryptResponseData = json_decode($decryptResponse, true);
+        if ($decryptResponseData['status'] == false && $decryptResponseData['code'] != 200) {
+            return [$response , $decryptResponseData];
+        }
+        $responseToken = $decryptResponseData['response']['data'];
         return $this->redirectToPayment($responseToken);
     }
 
@@ -91,7 +78,7 @@ class Payment
     public function response()
     {
         $responseData = $_GET['data'];
-        $data = HesabeCrypt::decrypt($responseData, $this->secretKey, $this->ivKey);
-        echo json_decode($data, true);
+        $data = $this->hesabeCrypt::decrypt($responseData, $this->secretKey, $this->ivKey);
+        return json_decode($data, true);
     }
 }
