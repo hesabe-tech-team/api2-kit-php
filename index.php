@@ -48,28 +48,38 @@
 <body>
 <?php
     require_once 'Constants.php';
+    require_once 'Controller.php';
+    $controller = new Controller();
+    $controller -> formSubmit();
+    
+    $date = new DateTime();
 
-    $formActionUrl = API_DATA['formActionUrl'];
-    $merchantCode = API_DATA['merchantCode'];
-    $amount = API_DATA['amount'];
-    $responseUrl = API_DATA['responseUrl'];
-    $failureUrl = API_DATA['failureUrl'];
-    $orderReferenceNumber = API_DATA['orderReferenceNumber'];
-    $version = API_DATA['version'];
+
+    // print_r(Constants::RESPONSE_URL);
+
+
+
+    // $formActionUrl = API_DATA['formActionUrl'];
+    // $merchantCode = API_DATA['merchantCode'];
+    // $amount = API_DATA['amount'];
+    // $responseUrl = API_DATA['responseUrl'];
+    // $failureUrl = API_DATA['failureUrl'];
+    // $orderReferenceNumber = API_DATA['orderReferenceNumber'];
+    // $version = API_DATA['version'];
 
 ?>
 <div class="flex-center position-ref full-height">
     <div class="content">
-        <form action="<?php echo $formActionUrl;?>" class="form" method="post" id="paymentForm">
+        <form action="" class="form" method="post" id="paymentForm">
             <div class="form-group">
                 <label for="merchant_code"> <strong>Merchant Code</strong> </label> <br>
-                <input type="text" name="merchantCode" value="<?php echo $merchantCode;?>">
+                <input type="text" name="merchantCode" value="<?php echo Constants::MERCHANT_CODE;?>">
                  <p class="error-display" id="merchantCode_validate"></p>
                 
             </div>
             <div class="form-group">
                 <label for="amount"> <strong>Amount</strong></label> <br>
-                <input type="text" name="amount" value="<?php echo $amount;?>">
+                <input type="text" name="amount" value="<?php echo mt_rand(10, 999);?>">
                 <p class="error-display" id="amount_validate"></p>
             </div>
             <div class="form-group">
@@ -98,17 +108,17 @@
             </div>
             <div class="form-group">
                 <label for="responseUrl"> <strong>Response URL</strong> </label> <br>
-                <input type="text" name="responseUrl" value="<?php echo $responseUrl; ?>">
+                <input type="text" name="responseUrl" value="<?php echo Constants::RESPONSE_URL;?>">
                 <p class="error-display" id="responseUrl_validate"></p>
             </div>
             <div class="form-group">
                 <label for="failureUrl"> <strong>Failure URL</strong> </label> <br>
-                <input type="text" name="failureUrl" value="<?php echo $failureUrl; ?>">
+                <input type="text" name="failureUrl" value="<?php echo Constants::FAILURE_URL;?>">
                 <p class="error-display" id="failureUrl_validate"></p>
             </div>
             <div class="form-group">
                 <label for="orderReferenceNumber"> <strong>Order Reference Number</strong> </label> <br>
-                <input type="text" name="orderReferenceNumber" value="<?php echo $orderReferenceNumber; ?>">
+                <input type="text" name="orderReferenceNumber" value="<?php echo $date->getTimestamp(); ?>">
                 <p class="error-display" id="orderReferenceNumber_validate"></p>
             </div>
             <div class="form-group">
@@ -133,7 +143,7 @@
             </div>
             <div class="form-group">
                 <label for="version"> <strong>Version</strong></label> <br>
-                <input type="text" name="version" value="<?php echo $version; ?>">
+                <input type="text" name="version" value="<?php echo Constants::VERSION ?>">
                 <p class="error-display" id="version_validate"></p>
             </div>            
             <div class="form-group">
