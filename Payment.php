@@ -24,12 +24,21 @@ class Payment
 
     /**
      * Create request for Payment
+     *
+     * @param object $data Models\CheckoutData
+     *
+     * @return array [$response , $decryptResponseData] Encrypted data and decrypted data
+     *
      */
     public function checkoutRequest($data)
     {
+        /// Serialize the payment data into JSON string
         $requestDataJson = json_encode($data);
+
+        // Encrypt the JSON Serialized string
         $encryptedData = $this->hesabeCrypt::encrypt($requestDataJson, $this->secretKey, $this->ivKey);
 
+        // POST the serialized string to the checkout API and receive back the response
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "$this->baseUrl/checkout",
@@ -50,17 +59,28 @@ class Payment
         ));
         $response = curl_exec($curl);
         curl_close($curl);
+
+        // Decrypt the response from the checkout API
         $decryptResponse = $this->hesabeCrypt::decrypt($response, $this->secretKey, $this->ivKey);
+
+        // De-serialize the JSON string into an object
         $decryptResponseData = json_decode($decryptResponse, true);
+
         if ($decryptResponseData['status'] == false && $decryptResponseData['code'] != 200) {
             return [$response , $decryptResponseData];
         }
         $responseToken = $decryptResponseData['response']['data'];
+
+        // Redirect the user to the payment page using the token from the checkout API response
         return $this->redirectToPayment($responseToken);
     }
 
     /**
      * Redirect to payment gateway to complete the process
+     *
+     * @param string $token [<description>]
+     *
+     * @return null [<description>]
      */
     public function redirectToPayment($token)
     {
@@ -74,11 +94,16 @@ class Payment
      * points to this method in which you'll receive a "data" param
      * as a GET request. Then you can process it accordingly.
      *
+     * @return array De-serialize the decrypted response
+     *
      */
     public function response()
     {
         $responseData = $_GET['data'];
+        //Decrypt the response received in the data query string
         $data = $this->hesabeCrypt::decrypt($responseData, $this->secretKey, $this->ivKey);
+
+        //De-serialize the decrypted response
         return json_decode($data, true);
     }
 }

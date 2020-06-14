@@ -13,10 +13,14 @@ class IndexController extends Controller
     public function formSubmit()
     {
         if (isset($_POST['submit'])) {
-            //Do all the submission part all here
+            // Initialize the Payment request encryption/decryption library using the KEY and IV from the configuration
             $payment = new Payment($this->paymentApiUrl, $_POST['merchantCode'], $this->secretKey, $this->ivKey, $this->accessCode);
+            // Getting the payment data into object
             $requestData = self::getCheckoutData($_POST);
+
+            // POST the requested object to the checkout API and receive back the response
             [$encryptedResponse , $decryptResponse] = $payment->checkoutRequest($requestData);
+
             echo "<p style='word-break: break-all;'> <b>Encrypted Data</b>:- ".$encryptedResponse."</p>";
             echo "<p><b>Decrypted Data</b>:- </p>";
             echo "<pre>";
@@ -26,7 +30,10 @@ class IndexController extends Controller
         }
 
         if (isset($_GET['id']) && isset($_GET['data'])) {
+            // Initialize the Payment request encryption/decryption library using the KEY and IV from the configuration
             $payment = new Payment($this->paymentApiUrl, $_GET['id'], $this->secretKey, $this->ivKey, $this->accessCode);
+            
+            //Decrypt the response received
             $response = $payment->response();
             echo "<p style='word-break: break-all;'> Encrypted Data:- ".$_GET['data']."</p>";
             echo "<p><b>Decrypted Data</b>:- </p>";
