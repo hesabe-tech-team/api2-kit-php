@@ -1,5 +1,7 @@
 <?php
 
+namespace Models;
+
 /**
  * This class contains all parameters needs to be defined
  * before encrypting and passing to the checkout api

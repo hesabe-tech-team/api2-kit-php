@@ -48,25 +48,10 @@
 <body>
 <?php
     require_once 'Constants.php';
-    require_once 'Controller.php';
-    $controller = new Controller();
+    require_once 'IndexController.php';
+    $controller = new IndexController();
     $controller -> formSubmit();
-    
     $date = new DateTime();
-
-
-    // print_r(Constants::RESPONSE_URL);
-
-
-
-    // $formActionUrl = API_DATA['formActionUrl'];
-    // $merchantCode = API_DATA['merchantCode'];
-    // $amount = API_DATA['amount'];
-    // $responseUrl = API_DATA['responseUrl'];
-    // $failureUrl = API_DATA['failureUrl'];
-    // $orderReferenceNumber = API_DATA['orderReferenceNumber'];
-    // $version = API_DATA['version'];
-
 ?>
 <div class="flex-center position-ref full-height">
     <div class="content">
