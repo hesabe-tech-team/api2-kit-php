@@ -138,44 +138,4 @@
     </div>
 </div>
 </body>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
-<script type="text/javascript">
-     $(document).ready(function () {
-        $('#paymentForm').validate({ // initialize the plugin
-            rules: {
-                merchantCode: {
-                    required: true
-                },
-                version: {
-                    required: true
-                },
-                paymentType: {
-                    required: true
-                },
-                responseUrl: {
-                    required: true,
-                    url: true
-                },
-                failureUrl: {
-                    required: true,
-                    url: true
-                },
-                orderReferenceNumber:{
-                    required: true,
-                },
-                amount: {
-                    required: true,
-                    number: true
-                }
-            },
-            errorPlacement: function (error, element) {
-                var name = $(element).attr("name");
-                error.appendTo($("#" + name + "_validate"));
-                $("#" + name + "_validate").show();
-            },
-        });
-    });
-</script>
 </html>

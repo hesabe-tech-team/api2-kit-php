@@ -78,7 +78,7 @@ class Payment
     /**
      * Redirect to payment gateway to complete the process
      *
-     * @param string $token [<description>]
+     * @param string $token Encrypted data
      *
      * @return null [<description>]
      */
