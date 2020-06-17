@@ -3,12 +3,15 @@
 namespace Models;
 
 /**
- * This class contains all parameters needs to be defined
+ * This class contains all parameters that needs to be defined
  * before encrypting and passing to the checkout api
+ *
+ * @author Hesabe
  */
-class CheckoutData
+class HesabeCheckoutRequestModel
 {
     public $amount;
+    public $currency;
     public $paymentType;
     public $orderReferenceNumber;
     public $version;

@@ -1,25 +1,33 @@
 <?php
 
-require_once 'HesabeCrypt.php';
+require_once 'Libraries/HesabeCrypt.php';
+require_once 'Controllers/ModelBindingController.php';
 
-class Payment
+/**
+ * This Class handles the payment checkout request and response.
+ *
+ * @author Hesabe
+ */
+class CheckoutController
 {
-    private $baseUrl;
-    private $merchantCode;
-    private $secretKey;
-    private $ivKey;
-    private $accessCode;
-    private $hesabeCrypt;
+    public $baseUrl;
+    public $merchantCode;
+    public $secretKey;
+    public $ivKey;
+    public $accessCode;
+    public $hesabeCrypt;
+    public $modelBinding;
 
     public function __construct($paymentApiUrl, $merchantCode, $secretKey, $ivKey, $accessCode)
     {
         $this->baseUrl = $paymentApiUrl;
         // Get all three values from Merchant Panel, Profile section
         $this->merchantCode = $merchantCode;      // Use Merchant Code
-        $this->secretKey = $secretKey;         // Use Secret key
-        $this->ivKey = $ivKey;             // Use Iv Key
-        $this->accessCode = $accessCode;        // Use Access Code
-        $this->hesabeCrypt = new HesabeCrypt();
+        $this->secretKey = $secretKey;            // Use Secret key
+        $this->ivKey = $ivKey;                    // Use Iv Key
+        $this->accessCode = $accessCode;          // Use Access Code
+        $this->hesabeCrypt = new HesabeCrypt();   // instance of Hesabe Crypt library
+        $this->modelBinding = new ModelBindingController();
     }
 
     /**
@@ -53,26 +61,15 @@ class Payment
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => array('data' => $encryptedData),
             CURLOPT_HTTPHEADER => array(
-                "accessCode: $this->accessCode",
+                "accessCode: $this->accessCode.ll",
                 "Accept: application/json"
             ),
         ));
         $response = curl_exec($curl);
         curl_close($curl);
 
-        // Decrypt the response from the checkout API
-        $decryptResponse = $this->hesabeCrypt::decrypt($response, $this->secretKey, $this->ivKey);
-
-        // De-serialize the JSON string into an object
-        $decryptResponseData = json_decode($decryptResponse, true);
-
-        if ($decryptResponseData['status'] == false && $decryptResponseData['code'] != 200) {
-            return [$response , $decryptResponseData];
-        }
-        $responseToken = $decryptResponseData['response']['data'];
-
-        // Redirect the user to the payment page using the token from the checkout API response
-        return $this->redirectToPayment($responseToken);
+        //Get encrypted and decrypted data response
+        return [$response , $decryptResponseData] = $this->decryptResponse($response);
     }
 
     /**
@@ -90,20 +87,47 @@ class Payment
 
     /**
      * Process the response after the transaction is complete
-     * To use this method, make sure your SuccessUrl or FailureUrl
-     * points to this method in which you'll receive a "data" param
-     * as a GET request. Then you can process it accordingly.
      *
      * @return array De-serialize the decrypted response
      *
      */
-    public function response()
+    public function paymentResponse($responseData)
     {
-        $responseData = $_GET['data'];
         //Decrypt the response received in the data query string
-        $data = $this->hesabeCrypt::decrypt($responseData, $this->secretKey, $this->ivKey);
+        $decryptResponse = $this->hesabeCrypt::decrypt($responseData, $this->secretKey, $this->ivKey);
 
         //De-serialize the decrypted response
-        return json_decode($data, true);
+        $decryptResponseData = json_decode($decryptResponse, true);
+
+        //Binding the decrypted response data to the entity model
+        $decryptedResponse = $this->modelBinding->paymentResponseData($decryptResponseData);
+
+        //return decrypted data
+        return $decryptedResponse;
+    }
+
+    /**
+     * Process the response after the form data has been requested.
+     *
+     * @return array De-serialize the decrypted response
+     *
+     */
+    public function decryptResponse($response)
+    {
+        // Decrypt the response from the checkout API
+        $decryptResponse = $this->hesabeCrypt::decrypt($response, $this->secretKey, $this->ivKey);
+
+        if (!$decryptResponse) {
+            $decryptResponse = $response;
+        }
+
+        // De-serialize the JSON string into an object
+        $decryptResponseData = json_decode($decryptResponse, true);
+
+        //Binding the decrypted response data to the entity model
+        $decryptedResponse = $this->modelBinding->checkoutResponseData($decryptResponseData);
+
+        //return encrypted and decrypted data
+        return [$response , $decryptedResponse];
     }
 }
