@@ -10,7 +10,7 @@ class Constants
     public const VERSION = "2.0";
 
     //Payment API URL
-    public const PAYMENT_API_URL = "http://paymentapi.test";
+    public const PAYMENT_API_URL = "https://sandbox.hesabe.com";
 
     // Get below values from Merchant Panel, Profile section
     public const ACCESS_CODE = "c333729b-d060-4b74-a49d-7686a8353481";

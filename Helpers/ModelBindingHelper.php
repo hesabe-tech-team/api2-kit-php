@@ -14,7 +14,7 @@ use Models\HesabePaymentResponseModel;
  *
  * @author Hesabe
  */
-class ModelBindingController
+class ModelBindingHelper
 {
     public $checkoutResponseModel;
     public $paymentResponseModel;
