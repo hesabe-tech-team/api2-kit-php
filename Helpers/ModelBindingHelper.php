@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Miscellaneous/Constants.php';
+require_once 'Misc/Constants.php';
 require_once 'Models/HesabeCheckoutRequestModel.php';
 require_once 'Models/HesabeCheckoutResponseModel.php';
 require_once 'Models/HesabePaymentResponseModel.php';
@@ -16,15 +16,15 @@ use Models\HesabePaymentResponseModel;
  */
 class ModelBindingHelper
 {
-    public $checkoutResponseModel;
-    public $paymentResponseModel;
-    public $checkoutRequestModel;
+    public $hesabeCheckoutResponseModel;
+    public $hesabePaymentResponseModel;
+    public $hesabeCheckoutRequestModel;
 
     public function __construct()
     {
-        $this->checkoutRequestModel = new HesabeCheckoutRequestModel();
-        $this->checkoutResponseModel = new HesabeCheckoutResponseModel();
-        $this->paymentResponseModel = new HesabePaymentResponseModel();
+        $this->hesabeCheckoutRequestModel = new HesabeCheckoutRequestModel();
+        $this->hesabeCheckoutResponseModel = new HesabeCheckoutResponseModel();
+        $this->hesabePaymentResponseModel = new HesabePaymentResponseModel();
     }
 
     /**
@@ -34,22 +34,22 @@ class ModelBindingHelper
      *
      * @return object
      */
-    public function checkoutRequestData($request)
+    public function getCheckoutRequestData($request)
     {
-        $this->checkoutRequestModel->amount = $request['amount'];
-        $this->checkoutRequestModel->currency = $request['currency'];
-        $this->checkoutRequestModel->paymentType = $request['paymentType'];
-        $this->checkoutRequestModel->orderReferenceNumber = $request['orderReferenceNumber'];
-        $this->checkoutRequestModel->version = $request['version'];
-        $this->checkoutRequestModel->variable1 = $request['variable1'];
-        $this->checkoutRequestModel->variable2 = $request['variable2'];
-        $this->checkoutRequestModel->variable3 = $request['variable3'];
-        $this->checkoutRequestModel->variable4 = $request['variable4'];
-        $this->checkoutRequestModel->variable5 = $request['variable5'];
-        $this->checkoutRequestModel->merchantCode = $request['merchantCode'];
-        $this->checkoutRequestModel->responseUrl = $request['responseUrl'];
-        $this->checkoutRequestModel->failureUrl = $request['failureUrl'];
-        return $this->checkoutRequestModel;
+        $this->hesabeCheckoutRequestModel->amount = $request['amount'];
+        $this->hesabeCheckoutRequestModel->currency = $request['currency'];
+        $this->hesabeCheckoutRequestModel->paymentType = $request['paymentType'];
+        $this->hesabeCheckoutRequestModel->orderReferenceNumber = $request['orderReferenceNumber'];
+        $this->hesabeCheckoutRequestModel->version = $request['version'];
+        $this->hesabeCheckoutRequestModel->variable1 = $request['variable1'];
+        $this->hesabeCheckoutRequestModel->variable2 = $request['variable2'];
+        $this->hesabeCheckoutRequestModel->variable3 = $request['variable3'];
+        $this->hesabeCheckoutRequestModel->variable4 = $request['variable4'];
+        $this->hesabeCheckoutRequestModel->variable5 = $request['variable5'];
+        $this->hesabeCheckoutRequestModel->merchantCode = $request['merchantCode'];
+        $this->hesabeCheckoutRequestModel->responseUrl = $request['responseUrl'];
+        $this->hesabeCheckoutRequestModel->failureUrl = $request['failureUrl'];
+        return $this->hesabeCheckoutRequestModel;
     }
 
     /**
@@ -59,15 +59,15 @@ class ModelBindingHelper
      *
      * @return object \Models\HesabeCheckoutResponseModel.
      */
-    public function checkoutResponseData($data)
+    public function getCheckoutResponseData($data)
     {
-        $this->checkoutResponseModel->status = $data['status'];
-        $this->checkoutResponseModel->code = $data['code'];
-        $this->checkoutResponseModel->message = $data['message'];
-        $this->checkoutResponseModel->response['data'] = ($data['code'] == Constants::SUCCESS_CODE ||
+        $this->hesabeCheckoutResponseModel->status = $data['status'];
+        $this->hesabeCheckoutResponseModel->code = $data['code'];
+        $this->hesabeCheckoutResponseModel->message = $data['message'];
+        $this->hesabeCheckoutResponseModel->response['data'] = ($data['code'] == Constants::SUCCESS_CODE ||
          $data['code'] == Constants::AUTHENTICATION_FAILED_CODE) ? $data['response']['data'] : $data['data'];
 
-        return $this->checkoutResponseModel;
+        return $this->hesabeCheckoutResponseModel;
     }
 
     /**
@@ -77,28 +77,28 @@ class ModelBindingHelper
      *
      * @return object \Models\HesabeCheckoutResponseModel.
      */
-    public function paymentResponseData($data)
+    public function getPaymentResponseData($data)
     {
-        $this->checkoutResponseModel->status = $data['status'];
-        $this->checkoutResponseModel->code = $data['code'];
-        $this->checkoutResponseModel->message = $data['message'];
+        $this->hesabeCheckoutResponseModel->status = $data['status'];
+        $this->hesabeCheckoutResponseModel->code = $data['code'];
+        $this->hesabeCheckoutResponseModel->message = $data['message'];
 
-        $this->paymentResponseModel->resultCode = $data['response']['resultCode'];
-        $this->paymentResponseModel->amount = $data['response']['amount'];
-        $this->paymentResponseModel->paymentToken = $data['response']['paymentToken'];
-        $this->paymentResponseModel->paymentId = $data['response']['paymentId'];
-        $this->paymentResponseModel->paidOn = $data['response']['paidOn'];
-        $this->paymentResponseModel->orderReferenceNumber = $data['response']['orderReferenceNumber'];
-        $this->paymentResponseModel->variable1 = $data['response']['variable1'];
-        $this->paymentResponseModel->variable2 = $data['response']['variable2'];
-        $this->paymentResponseModel->variable3 = $data['response']['variable3'];
-        $this->paymentResponseModel->variable4 = $data['response']['variable4'];
-        $this->paymentResponseModel->variable5 = $data['response']['variable5'];
-        $this->paymentResponseModel->method = $data['response']['method'];
-        $this->paymentResponseModel->administrativeCharge = $data['response']['administrativeCharge'];
+        $this->hesabePaymentResponseModel->resultCode = $data['response']['resultCode'];
+        $this->hesabePaymentResponseModel->amount = $data['response']['amount'];
+        $this->hesabePaymentResponseModel->paymentToken = $data['response']['paymentToken'];
+        $this->hesabePaymentResponseModel->paymentId = $data['response']['paymentId'];
+        $this->hesabePaymentResponseModel->paidOn = $data['response']['paidOn'];
+        $this->hesabePaymentResponseModel->orderReferenceNumber = $data['response']['orderReferenceNumber'];
+        $this->hesabePaymentResponseModel->variable1 = $data['response']['variable1'];
+        $this->hesabePaymentResponseModel->variable2 = $data['response']['variable2'];
+        $this->hesabePaymentResponseModel->variable3 = $data['response']['variable3'];
+        $this->hesabePaymentResponseModel->variable4 = $data['response']['variable4'];
+        $this->hesabePaymentResponseModel->variable5 = $data['response']['variable5'];
+        $this->hesabePaymentResponseModel->method = $data['response']['method'];
+        $this->hesabePaymentResponseModel->administrativeCharge = $data['response']['administrativeCharge'];
 
         //Get Payment response array.
-        $this->checkoutResponseModel->response = $this->paymentResponseModel->getVariables();
-        return $this->checkoutResponseModel;
+        $this->hesabeCheckoutResponseModel->response = $this->hesabePaymentResponseModel->getVariables();
+        return $this->hesabeCheckoutResponseModel;
     }
 }

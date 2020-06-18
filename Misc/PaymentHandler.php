@@ -1,14 +1,13 @@
 <?php
 
 require_once 'Libraries/HesabeCrypt.php';
-require_once 'Helpers/ModelBindingHelper.php';
 
 /**
  * This Class handles the payment checkout request and response.
  *
  * @author Hesabe
  */
-class CheckoutController
+class PaymentHandler
 {
     public $baseUrl;
     public $merchantCode;
@@ -16,7 +15,7 @@ class CheckoutController
     public $ivKey;
     public $accessCode;
     public $hesabeCrypt;
-    public $modelBinding;
+    public $odelBindingHelper;
 
     public function __construct($paymentApiUrl, $merchantCode, $secretKey, $ivKey, $accessCode)
     {
@@ -27,7 +26,6 @@ class CheckoutController
         $this->ivKey = $ivKey;                    // Use Iv Key
         $this->accessCode = $accessCode;          // Use Access Code
         $this->hesabeCrypt = new HesabeCrypt();   // instance of Hesabe Crypt library
-        $this->modelBinding = new ModelBindingHelper();
     }
 
     /**
