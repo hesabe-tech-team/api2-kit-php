@@ -18,7 +18,7 @@ class Constants
     public const MERCHANT_IV = "5NVdrlPVNnjo2Jy9";
     public const MERCHANT_CODE = "842217";
 
-    // This URL are defined by you to get the response from Payment Gateway
+    // This URL are defined by you to get the response from Payment Gateway after success and failure
     public const RESPONSE_URL = "http://api2-kit-php.test/index.php/?id=842217";
     public const FAILURE_URL = "http://api2-kit-php.test/index.php/?id=842217";
 
