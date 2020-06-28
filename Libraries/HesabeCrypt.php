@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * This Encrypt Decrypt methods for API Request and Response in hesabe
+ *
+ * @author Hesabe
+ *
+ */
+
 class HesabeCrypt
 {
     /**
@@ -70,6 +77,4 @@ class HesabeCrypt
         $chars = array_map("chr", $byteArray);
         return join($chars);
     }
-    
-    
 }
