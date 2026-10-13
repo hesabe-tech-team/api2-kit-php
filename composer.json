@@ -1,0 +1,38 @@
+{
+    "name": "ruptyx/hesabe",
+    "description": "Hesabe payment gateway SDK for PHP: checkout, transaction lookup, refunds and webhooks.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["hesabe", "knet", "payment", "kuwait", "gateway"],
+    "authors": [
+        {"name": "the hesabe SDK authors"}
+    ],
+    "require": {
+        "php": ">=8.1",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-openssl": "*"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^10.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Hesabe\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Hesabe\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "analyse": "phpstan analyse --memory-limit=512M",
+        "smoke": "php tests/smoke.php"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
