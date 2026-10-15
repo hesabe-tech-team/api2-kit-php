@@ -99,13 +99,16 @@ abstract class Resource
         try {
             return $send($bearer);
         } catch (AuthenticationException $exception) {
+            // The token is dead either way: every new Merchant Panel login ends the earlier
+            // sessions (probed October 2026), and a kept token would fail every call until it
+            // expired.
+            $this->session->invalidate();
             // A 401 can arrive after Hesabe processed the call, and there are no idempotency
             // keys: replaying a refund would move money twice. Only replayable calls get a
             // second attempt with a fresh token.
             if (!($idempotent ?? $method === 'GET')) {
                 throw $exception;
             }
-            $this->session->invalidate();
             return $send($this->session->token());
         }
     }

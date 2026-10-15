@@ -144,6 +144,25 @@ final class ResourcesTest extends TestCase
         );
     }
 
+    public function testTheCallAfterARefundsA401SignsInAgain(): void
+    {
+        $sender = new FakeSender(
+            Support::json(200, ['status' => true, 'response' => ['token' => ['access_token' => 'AT1']]]),
+            Support::json(401, ['status' => false, 'message' => 'Unauthenticated.']),
+            Support::json(200, ['status' => true, 'response' => ['token' => ['access_token' => 'AT2']]]),
+            Support::ok(['id' => 8, 'status' => 0]),
+        );
+        $client = self::client($sender);
+        try {
+            $client->refunds->create('T1', '0.250', RefundMethod::PARTIAL);
+            self::fail('Expected an AuthenticationException');
+        } catch (AuthenticationException) {
+        }
+        self::assertSame(['id' => 8, 'status' => 0], $client->refunds->create('T1', '0.250', RefundMethod::PARTIAL));
+        self::assertSame('https://api.test/api/v1/login', $sender->calls[2]['url']);
+        self::assertSame('Bearer AT2', $sender->calls[3]['headers']['Authorization']);
+    }
+
     public function testAReadIsReplayedOnceWithAFreshLogin(): void
     {
         $sender = new FakeSender(

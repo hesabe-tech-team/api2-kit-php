@@ -27,7 +27,7 @@ use Hesabe\Session\TokenStore;
  */
 final class Hesabe
 {
-    public const VERSION = '1.0.0';
+    public const VERSION = '1.0.1';
 
     public readonly Checkout $checkout;
     public readonly Transactions $transactions;
