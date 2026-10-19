@@ -12,8 +12,8 @@ Not on Packagist yet. Install from GitHub, pinning the release tag:
 
 ```json
 {
-    "repositories": [{"type": "vcs", "url": "https://github.com/ruptyx/hesabe-php"}],
-    "require": {"ruptyx/hesabe": "^1.0"}
+    "repositories": [{"type": "vcs", "url": "https://github.com/hesabe-tech-team/api2-kit-php"}],
+    "require": {"hesabe-tech-team/api2-kit-php": "^2.0"}
 }
 ```
 

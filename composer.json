@@ -1,5 +1,5 @@
 {
-    "name": "ruptyx/hesabe",
+    "name": "hesabe-tech-team/api2-kit-php",
     "description": "Hesabe payment gateway SDK for PHP: checkout, transaction lookup, refunds and webhooks.",
     "type": "library",
     "license": "MIT",
